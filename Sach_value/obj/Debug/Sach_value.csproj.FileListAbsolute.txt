@@ -1,0 +1,6 @@
+D:\OF\OnlaiCshap\websach\Sach_value\bin\Debug\Sach_value.dll
+D:\OF\OnlaiCshap\websach\Sach_value\bin\Debug\Sach_value.pdb
+D:\OF\OnlaiCshap\websach\Sach_value\obj\Debug\Sach_value.csproj.CoreCompileInputs.cache
+D:\OF\OnlaiCshap\websach\Sach_value\obj\Debug\Sach_value.dll
+D:\OF\OnlaiCshap\websach\Sach_value\obj\Debug\Sach_value.pdb
+D:\OF\OnlaiCshap\websach\Sach_value\obj\Debug\Sach_value.csprojAssemblyReference.cache

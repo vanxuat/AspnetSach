@@ -1,0 +1,56 @@
+﻿@{ 
+    var sp = ViewBag.Chitietsp as Sach_value.sachvalue;
+}
+
+<div class="row">
+    <div class="col-sm-3">
+        @{
+            Html.RenderAction("PartialviewMenu", "Home");
+        }
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+            <img src="@sp.HinhAnh" width="300" height="400" />
+        </div>
+       <div class="col-xs-2">
+          
+           <p>Tên Sách: @sp.Tensach</p>
+           <p>Giá Sách: @sp.Gia</p>
+           <p>Số Trang: @sp.SoTrang</p>
+           <a class="btn  btn-primary" onclick="MuaSach('@sp.id','@sp.Gia')">Mua Sách</a>
+       </div>
+
+
+    </div>
+</div>
+
+@section MausanPham{
+  
+    <script type="text/javascript">
+        function MuaSach(spid, Gia) {
+          
+
+            $.ajax({
+                url: "@Url.Action("MuaSach","Home")",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: '{"ID":"' + spid + '","Gia":"' + Gia + '"}',
+                success: function (result) {
+                    if (result == false) {
+                        alert("Bạn Chưa Đăng Nhập Tài Khoản");
+                    }
+                    else {
+                        alert("Thêm sản Phẩm Thành Công");
+                    }
+                }
+            });
+
+
+        }
+
+
+
+    </script>
+    
+  }

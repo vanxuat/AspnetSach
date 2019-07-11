@@ -1,0 +1,14 @@
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\sach_model.dll.config
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\sach_model.dll
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\sach_model.pdb
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\EntityFramework.dll
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\EntityFramework.SqlServer.dll
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\Sach_value.dll
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\Sach_value.pdb
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\EntityFramework.xml
+D:\OF\OnlaiCshap\websach\sach_model\bin\Debug\EntityFramework.SqlServer.xml
+D:\OF\OnlaiCshap\websach\sach_model\obj\Debug\sach_model.csprojAssemblyReference.cache
+D:\OF\OnlaiCshap\websach\sach_model\obj\Debug\sach_model.csproj.CoreCompileInputs.cache
+D:\OF\OnlaiCshap\websach\sach_model\obj\Debug\sach_model.csproj.CopyComplete
+D:\OF\OnlaiCshap\websach\sach_model\obj\Debug\sach_model.dll
+D:\OF\OnlaiCshap\websach\sach_model\obj\Debug\sach_model.pdb

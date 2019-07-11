@@ -1,0 +1,90 @@
+﻿
+
+@{
+   var  listtusach = ViewBag.Tusach as List<Sach_value.TudachValue>;
+
+
+    ViewBag.Title = "ThemSach";
+}
+
+@Html.ActionLink("List Sách ", "ListSach","QuanLy",new {@class= "btn btn-secondary btn-lg active" })
+
+<form method="post" action="/Admin/QuanLy/ThemSach" enctype ="multipart/form-data" >
+    <div class="form-group">
+        <label for="TenSach">Tên Sách</label>
+        <input type="text" class="form-control" id="TenSach" name="Tensach" placeholder="Tên Sách">
+    </div>
+    <div class="form-group">
+        <label for="TacGia">Tác Giả</label>
+        <input type="text" class="form-control" id="TacGia" name="Tacgia" placeholder="Tác Giả">
+    </div>
+    <div class="form-group">
+        <label for="Gia">Giá</label>
+        <input type="text" class="form-control" id="Gia" name="Gia" placeholder="Giá">
+    </div>
+    <div class="form-group">
+        <label for="SoTrang">Số Trang</label>
+        <input type="text" class="form-control" id="SoTrang" name="SoTrang" placeholder="Số Trang">
+    </div>
+    <div class="form-group">
+        <img src="#" width="178px" height="160px" id="hinhsach" alt="không có hình" />
+        <div class="form-group">
+
+            <label for="HinhAnh">Thêm Hình Ảnh</label>
+            <input type="file" class="form-control-file" id="HinhAnh" name="HinhAnh">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Kho">Kho</label>
+        <input type="text" class="form-control" id="kho" name="Kho" placeholder="Kho">
+    </div>
+
+    <div class="form-group">
+        <label for="nhaxuatban">Nhà Xuất Bản</label>
+        <input type="text" class="form-control" id="nhaxuatban" name="NhaXuatBan" placeholder="Nhà Xuất Bản">
+    </div>
+    <div class="form-group">
+        <label>Ngày Phát Hành</label>
+        <input type="date" class="form-control" id="NgayPhatHanh" name="NgayPhatHanh" placeholder="Ngày Phát Hành"/>
+    </div>
+    <div class="form-group">
+        <label for="tusach">Tu Sách</label>
+        <select class="form-control" id="tusach" name="idtusach">
+            @foreach (var item in listtusach)
+            {
+                <option value="@item.ID">@item.TenTuSach</option>
+            }
+          
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Thêm Sách Mới</button>
+</form>
+
+
+
+@section Themtusach{
+
+<script type="text/javascript">
+    $("#HinhAnh").change(function () {
+        readURL(this);
+    });
+
+
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#hinhsach').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    </script>    
+    
+}

@@ -1,0 +1,123 @@
+﻿@using Sach_value
+@{
+    var user = (taikhoan)Session[CommonConstants.SESSION_ACCOUNT];
+}
+
+
+@if (user != null && user.Quyen==1)
+{
+
+    <div class="dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @user.nguoidung
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Thông Tin</a>
+            <a class="dropdown-item"  href="@Url.Action("DangXuat","LoginUser")">Đăng Xuất</a>
+        </div>
+    </div>
+    <a class="navbar-brand" href="@Url.Action("SPSach","Home")"><img  src="~/Content/Img/giohang12.png"/></a>
+}
+else
+{
+    <a class="navbar-brand btn " data-toggle="modal" data-target="#myModal">Đăng Nhập</a>
+    <a class="navbar-brand btn " data-toggle="modal" data-target="#dangki">Đăng Kí</a>
+}
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">ĐĂNG NHẬP TÀI KHOẢN</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div id="canhbao" class="d-none alert alert-warning alert-dismissible fade show ">
+                <strong>Warning!</strong>
+                <span>Tài Khoản và mật khẩu không đúng</span>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="target">
+                    <div class="form-group">
+                        <label for="IDNguiDung">Tên Đăng Nhập</label>
+                        <input type="text" class="form-control" id="IDNguiDung" aria-describedby="emailHelp" name="nguoidung" placeholder="Tên Đăng Nhập">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="IDMatKhau">Mật Khuẩu</label>
+                        <input type="password" class="form-control" id="IDMatKhau" name="matkhau" placeholder="Mật Khẩu">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <div class="form-group margin-top-10 ">
+                        <span>
+                            <a class="btn" href="@Url.Action("IndexAsync","Login",new { areas="Admin"})"><img src="~/Areas/Admin/containt/Image/google.png" /></a>
+                            <a class="btn"><img src="~/Areas/Admin/containt/Image/facebook.png" /></a>
+
+                        </span>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="dangki">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">ĐĂNG NHẬP TÀI KHOẢN</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form action="@Url.Action("Dangki","LoginUser")" method="post">
+
+                    <div class="form-group">
+                        <label for="nguoidung">Tên Đăng Nhập</label>
+                        <input type="text" class="form-control" id="nguoidung" name="nguoidung" aria-describedby="emailHelp" placeholder="Tên Người Dùng">
+                    </div>
+                    <div class="form-group">
+                        <label for="matkhau">Mật Khẩu</label>
+                        <input type="password" class="form-control" id="matkhau" name="matkhau" placeholder="Mật Khẩu">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Nhập Đại Chỉ Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="dienthoai">Điện Thoại</label>
+                        <input type="text" class="form-control" id="dienthoai" name="dienthoai" placeholder="Nhập Điện Thoại">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Đăng Kí</button>
+
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

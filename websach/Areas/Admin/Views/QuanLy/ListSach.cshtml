@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Sach_value.sachvalue>
+
+@{
+    ViewBag.Title = "ListSach";
+}
+
+<h2>ListSach</h2>
+
+<p>
+    @Html.ActionLink("Thêm Sách Mới", "ThemSach", "QuanLy")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Tensach)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tacgia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Gia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SoTrang)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HinhAnh)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Kho)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NhaXuatBan)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TenTuSach)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tensach)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tacgia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SoTrang)
+        </td>
+        <td>
+           <img src="@item.HinhAnh" alt="không có hình"  width="178px" height="160px"  />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Kho)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NhaXuatBan)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TenTuSach)
+        </td>
+        <td>
+            <a href="@Url.Action("SuaSach","QuanLy",new {id=item.id })" class="btn btn-secondary btn-sm active" role="button" aria-pressed="true">Sửa Sản Phẩm</a>
+
+            <a onclick="xoasach('@item.id','@item.Tensach')" class="btn btn-secondary btn-sm active" role="button" aria-pressed="true">Xóa Sách</a>
+
+        </td>
+    </tr>
+}
+
+</table>
+
+
+<script >
+
+ 
+    function xoasach(idxoa,tensach) {
+
+        var r = confirm(`Bạn có muốn xóa sản phẩm ${tensach}`);
+        if (r == true) {
+            $.ajax({
+                url: "@Url.Action("XoaSach","QuanLy")",
+                type: "POST",
+                data: {
+                    id: idxoa
+                },
+                success: function (result) {
+                    if (result) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Thất bại")
+                    }
+                }
+            });
+        }
+        else {
+            window.location.reload();
+        }
+       
+    }
+
+   
+
+</script>

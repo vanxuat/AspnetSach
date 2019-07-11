@@ -1,0 +1,12 @@
+﻿
+
+@using (Html.BeginForm("ThemTuSach","QuanLy",FormMethod.Post))
+{
+<div class="form-group">
+    @Html.Label("Tusach","Thêm tu sách")
+    @Html.TextBox("TenTuSach")
+    <button type="submit">Lưu</button>
+</div>
+}
+
+@Html.ActionLink("Danh Sách Tủ Sách", "DanhSachTuS", "QuanLy")

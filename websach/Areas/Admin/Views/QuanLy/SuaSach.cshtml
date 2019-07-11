@@ -1,0 +1,105 @@
+﻿@model Sach_value.sachvalue
+@{
+    var tusach = ViewBag.Tusach as List<Sach_value.TudachValue>;
+    
+}
+
+<h2>Chỉnh Sửa Sách</h2>
+
+@using (Html.BeginForm("SuaSach", "QuanLy", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    @Html.TextBoxFor(m => m.id, new { @class = "form-control ", @type = "hidden"})
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Tensach)
+        @Html.TextBoxFor(m => m.Tensach, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Tacgia)
+        @Html.TextBoxFor(m => m.Tacgia, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Gia)
+        @Html.TextBoxFor(m => m.Gia, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SoTrang)
+        @Html.TextBoxFor(m => m.SoTrang, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Kho)
+        @Html.TextBoxFor(m => m.Kho, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NhaXuatBan)
+        @Html.TextBoxFor(m => m.NhaXuatBan, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NgayPhatHanh)
+      @Html.TextBoxFor(m=>m.NgayPhatHanh,new {@class= "form-control",@type="date" })
+    </div>
+    <div class="form-group">
+        <h3>Ảnh</h3>
+        @Html.TextBoxFor(m => m.HinhAnh, new { type = "file", name = "HinhAnh", id = "avatar" })
+        <div style="margin-top:15px;">
+            <img style="width:200px;height:150px;" id="hinhanh" class="img-thumbnail rimage" src="@Model.HinhAnh" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m=>m.TenTuSach)
+        @{ 
+            List<SelectListItem> ListTuSach = new List<SelectListItem>();
+            foreach (var item in tusach)
+            {
+                ListTuSach.Add(new SelectListItem() {
+                    Value=""+item.ID,
+                    Text=item.TenTuSach,
+                    
+                    
+                });
+            }
+        }
+        @Html.DropDownListFor(m=>m.idtusach, ListTuSach,new { @class= "form-control" })
+     
+
+
+    </div>
+
+    @Html.TextBox("LuuLai", "Lưu Lại", new { @type = "submit" });
+
+}
+
+
+@section SuaSach{
+
+    <script type="text/javascript">
+        $("#avatar").change(function () {
+
+            readURL(this);
+        });
+
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#hinhanh').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        if (window.location.hostname) {
+            alert(Xuat);
+        }
+
+
+    </script>
+
+
+}

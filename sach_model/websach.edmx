@@ -1,0 +1,1044 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="QuanLySachModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DonHang">
+          <Key>
+            <PropertyRef Name="IDonHang" />
+          </Key>
+          <Property Name="IDonHang" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NgayDatHang" Type="date" />
+          <Property Name="IDNguoiMua" Type="uniqueidentifier" />
+          <Property Name="TongTien" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="GioHang">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IDDonHag" Type="uniqueidentifier" />
+          <Property Name="sachid" Type="uniqueidentifier" />
+          <Property Name="TamTinh" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="soluong" Type="int" />
+        </EntityType>
+        <EntityType Name="Sach">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Tensach" Type="nvarchar" MaxLength="50" />
+          <Property Name="TacGia" Type="nvarchar" MaxLength="50" />
+          <Property Name="Gia" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="sotrang" Type="int" />
+          <Property Name="hinhanh" Type="nchar" MaxLength="200" />
+          <Property Name="kho" Type="char" MaxLength="50" />
+          <Property Name="nhaxuatban" Type="nvarchar" MaxLength="50" />
+          <Property Name="tusach" Type="uniqueidentifier" />
+          <Property Name="NgayPhatHanh" Type="date" />
+        </EntityType>
+        <EntityType Name="TuSach">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Tentusach" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nguoidung" Type="char" MaxLength="50" />
+          <Property Name="matkhau" Type="char" MaxLength="200" />
+          <Property Name="email" Type="char" MaxLength="50" />
+          <Property Name="dienthoai" Type="char" MaxLength="12" />
+          <Property Name="hinhanh" Type="nvarchar" MaxLength="200" />
+          <Property Name="Quyen" Type="int" />
+          <Property Name="GoogleID" Type="nvarchar" MaxLength="100" />
+          <Property Name="FaceBookID" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_DonHang_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DonHang">
+              <PropertyRef Name="IDNguoiMua" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GioHang_DonHang">
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonHang">
+              <PropertyRef Name="IDonHang" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="IDDonHag" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GioHang_Sach">
+          <End Role="Sach" Type="Self.Sach" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sach">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="sachid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sach_tusach">
+          <End Role="TuSach" Type="Self.TuSach" Multiplicity="0..1" />
+          <End Role="Sach" Type="Self.Sach" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TuSach">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Sach">
+              <PropertyRef Name="tusach" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="dangnhapGoogle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="email" Type="char" Mode="In" />
+          <Parameter Name="hinhanh" Type="nvarchar" Mode="In" />
+          <Parameter Name="GoogleID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="DanhSachTBSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="batdau" Type="int" Mode="In" />
+          <Parameter Name="soluong" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DanhSachTheoID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="DoiMat_Khau" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="matkhau" Type="char" Mode="In" />
+        </Function>
+        <Function Name="Kiemtrataikhoan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nguoidung" Type="char" Mode="In" />
+          <Parameter Name="matkhau" Type="char" Mode="In" />
+        </Function>
+        <Function Name="KiemTraTaiKhoanGoogle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GoogleID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="KiemTraTaiKhoanTrongDonHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDUser" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="KiemTraTkDangKi" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nguoiduung" Type="char" Mode="In" />
+        </Function>
+        <Function Name="LauTuSachID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="LayDssach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="LayGioHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDDonHag" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="LaysachID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="LaySachTheoIDTu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idtusach" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="LaySachTheoTuS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idtusach" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="start" Type="int" Mode="In" />
+          <Parameter Name="soluong" Type="int" Mode="In" />
+        </Function>
+        <Function Name="LayTuSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SuaSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Tensach" Type="nvarchar" Mode="In" />
+          <Parameter Name="TacGia" Type="nvarchar" Mode="In" />
+          <Parameter Name="Gia" Type="decimal" Mode="In" />
+          <Parameter Name="sotrang" Type="int" Mode="In" />
+          <Parameter Name="hinhanh" Type="nchar" Mode="In" />
+          <Parameter Name="kho" Type="char" Mode="In" />
+          <Parameter Name="nhaxuatban" Type="nvarchar" Mode="In" />
+          <Parameter Name="NgayPhatHanh" Type="date" Mode="In" />
+          <Parameter Name="tusach" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="SuaTuSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Tentusach" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ThemDonHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDonHang" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="NgayDatHang" Type="date" Mode="In" />
+          <Parameter Name="IDNguoiMua" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="TongTien" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="ThemgioHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="IDDonHag" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="sachid" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="TamTinh" Type="decimal" Mode="In" />
+          <Parameter Name="soluong" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ThemNguoiDung" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nguoidung" Type="char" Mode="In" />
+          <Parameter Name="matkhau" Type="char" Mode="In" />
+          <Parameter Name="email" Type="char" Mode="In" />
+          <Parameter Name="dienthoai" Type="char" Mode="In" />
+          <Parameter Name="Quyen" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ThemNguoiDungKhach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="nguoidung" Type="char" Mode="In" />
+          <Parameter Name="matkhau" Type="char" Mode="In" />
+          <Parameter Name="email" Type="char" Mode="In" />
+          <Parameter Name="dienthoai" Type="char" Mode="In" />
+          <Parameter Name="Quyen" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ThemSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Tensach" Type="nvarchar" Mode="In" />
+          <Parameter Name="TacGia" Type="nvarchar" Mode="In" />
+          <Parameter Name="Gia" Type="decimal" Mode="In" />
+          <Parameter Name="sotrang" Type="int" Mode="In" />
+          <Parameter Name="hinhanh" Type="nchar" Mode="In" />
+          <Parameter Name="kho" Type="char" Mode="In" />
+          <Parameter Name="nhaxuatban" Type="nvarchar" Mode="In" />
+          <Parameter Name="tusach" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="NgayPhatHanh" Type="date" Mode="In" />
+        </Function>
+        <Function Name="ThemTuSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Tentusach" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="TimKiemTheoTuSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="batdau" Type="int" Mode="In" />
+          <Parameter Name="soluong" Type="int" Mode="In" />
+          <Parameter Name="IDtusach" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="TongSoSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TongTien" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDDonHang" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="Update_HinhAh" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="hinhanh" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Update_Taikhoan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="email" Type="char" Mode="In" />
+          <Parameter Name="dienthoai" Type="char" Mode="In" />
+        </Function>
+        <Function Name="Update_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="matkhau" Type="char" Mode="In" />
+          <Parameter Name="email" Type="char" Mode="In" />
+          <Parameter Name="dienthoai" Type="char" Mode="In" />
+          <Parameter Name="hinhanh" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateDonHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDonHang" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="TongTien" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="UpdateQuenUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="UpdateSoluongGioHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idGioHang" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="soluong" Type="int" Mode="In" />
+          <Parameter Name="TamTinh" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="XoaSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="XoaSpTrogGioHang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdGioHang" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="XoaTaiKhoan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="XoaTuSach" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <EntityContainer Name="QuanLySachModelStoreContainer">
+          <EntitySet Name="DonHang" EntityType="Self.DonHang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GioHang" EntityType="Self.GioHang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sach" EntityType="Self.Sach" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TuSach" EntityType="Self.TuSach" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DonHang_User" Association="Self.FK_DonHang_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="DonHang" EntitySet="DonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GioHang_DonHang" Association="Self.FK_GioHang_DonHang">
+            <End Role="DonHang" EntitySet="DonHang" />
+            <End Role="GioHang" EntitySet="GioHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GioHang_Sach" Association="Self.FK_GioHang_Sach">
+            <End Role="Sach" EntitySet="Sach" />
+            <End Role="GioHang" EntitySet="GioHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sach_tusach" Association="Self.FK_Sach_tusach">
+            <End Role="TuSach" EntitySet="TuSach" />
+            <End Role="Sach" EntitySet="Sach" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="QuanLySachModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Sach">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="Tensach" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TacGia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Gia" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="sotrang" Type="Int32" />
+          <Property Name="hinhanh" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="kho" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="nhaxuatban" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="tusach" Type="Guid" />
+          <NavigationProperty Name="TuSach1" Relationship="Self.FK_Sach_tusach" FromRole="Sach" ToRole="TuSach" />
+          <Property Name="NgayPhatHanh" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="GioHangs" Relationship="QuanLySachModel.FK_GioHang_Sach" FromRole="Sach" ToRole="GioHang" />
+        </EntityType>
+        <EntityType Name="TuSach">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="Tentusach" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Saches" Relationship="Self.FK_Sach_tusach" FromRole="TuSach" ToRole="Sach" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="nguoidung" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="matkhau" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="dienthoai" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="hinhanh" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Quyen" Type="Int32" />
+          <Property Name="GoogleID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FaceBookID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DonHangs" Relationship="QuanLySachModel.FK_DonHang_User" FromRole="User" ToRole="DonHang" />
+        </EntityType>
+        <Association Name="FK_Sach_tusach">
+          <End Role="TuSach" Type="Self.TuSach" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Sach" Type="Self.Sach" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TuSach">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Sach">
+              <PropertyRef Name="tusach" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QuanLySachEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Saches" EntityType="Self.Sach" />
+          <EntitySet Name="TuSaches" EntityType="Self.TuSach" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Sach_tusach" Association="Self.FK_Sach_tusach">
+            <End Role="TuSach" EntitySet="TuSaches" />
+            <End Role="Sach" EntitySet="Saches" />
+          </AssociationSet>
+          <FunctionImport Name="Kiemtrataikhoan" ReturnType="Collection(QuanLySachModel.Kiemtrataikhoan_Result)">
+            <Parameter Name="nguoidung" Mode="In" Type="String" />
+            <Parameter Name="matkhau" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ThemNguoiDung">
+            <Parameter Name="nguoidung" Mode="In" Type="String" />
+            <Parameter Name="matkhau" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="dienthoai" Mode="In" Type="String" />
+            <Parameter Name="Quyen" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Update_User">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="matkhau" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="dienthoai" Mode="In" Type="String" />
+            <Parameter Name="hinhanh" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="XoaTaiKhoan">
+          <Parameter Name="ID" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="dangnhapGoogle">
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="hinhanh" Mode="In" Type="String" />
+            <Parameter Name="GoogleID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="KiemTraTaiKhoanGoogle" ReturnType="Collection(QuanLySachModel.KiemTraTaiKhoanGoogle_Result)">
+          <Parameter Name="GoogleID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DoiMat_Khau">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="matkhau" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Update_HinhAh">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="hinhanh" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Update_Taikhoan">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="dienthoai" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="LayDssach" ReturnType="Collection(QuanLySachModel.LayDssach_Result)" />
+          <FunctionImport Name="LayTuSach" ReturnType="Collection(QuanLySachModel.LayTuSach_Result)" />
+          <FunctionImport Name="ThemSach">
+            <Parameter Name="Tensach" Mode="In" Type="String" />
+            <Parameter Name="TacGia" Mode="In" Type="String" />
+            <Parameter Name="Gia" Mode="In" Type="Decimal" />
+            <Parameter Name="sotrang" Mode="In" Type="Int32" />
+            <Parameter Name="hinhanh" Mode="In" Type="String" />
+            <Parameter Name="kho" Mode="In" Type="String" />
+            <Parameter Name="nhaxuatban" Mode="In" Type="String" />
+            <Parameter Name="tusach" Mode="In" Type="Guid" />
+            <Parameter Name="NgayPhatHanh" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="ThemTuSach">
+          <Parameter Name="Tentusach" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DanhSachTheoID" ReturnType="Collection(QuanLySachModel.DanhSachTheoID_Result)">
+          <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="SuaSach">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="Tensach" Mode="In" Type="String" />
+            <Parameter Name="TacGia" Mode="In" Type="String" />
+            <Parameter Name="Gia" Mode="In" Type="Decimal" />
+            <Parameter Name="sotrang" Mode="In" Type="Int32" />
+            <Parameter Name="hinhanh" Mode="In" Type="String" />
+            <Parameter Name="kho" Mode="In" Type="String" />
+            <Parameter Name="nhaxuatban" Mode="In" Type="String" />
+            <Parameter Name="NgayPhatHanh" Mode="In" Type="DateTime" />
+            <Parameter Name="tusach" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="SuaTuSach">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="Tentusach" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="XoaSach">
+          <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="XoaTuSach">
+          <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="LauTuSachID" ReturnType="Collection(QuanLySachModel.LauTuSachID_Result)">
+          <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="LaysachID" ReturnType="Collection(QuanLySachModel.LaysachID_Result)">
+          <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="DanhSachTBSach" ReturnType="Collection(QuanLySachModel.DanhSachTBSach_Result)">
+            <Parameter Name="batdau" Mode="In" Type="Int32" />
+            <Parameter Name="soluong" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="TimKiemTheoTuSach" ReturnType="Collection(QuanLySachModel.TimKiemTheoTuSach_Result)">
+            <Parameter Name="batdau" Mode="In" Type="Int32" />
+            <Parameter Name="soluong" Mode="In" Type="Int32" />
+            <Parameter Name="IDtusach" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="TongSoSach" ReturnType="Collection(QuanLySachModel.TongSoSach_Result)" />
+          <FunctionImport Name="KiemTraTkDangKi" ReturnType="Collection(String)">
+          <Parameter Name="nguoiduung" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ThemNguoiDungKhach">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="nguoidung" Mode="In" Type="String" />
+            <Parameter Name="matkhau" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="dienthoai" Mode="In" Type="String" />
+            <Parameter Name="Quyen" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateQuenUser">
+          <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="LaySachTheoTuS" ReturnType="Collection(QuanLySachModel.LaySachTheoTuS_Result)">
+            <Parameter Name="idtusach" Mode="In" Type="Guid" />
+            <Parameter Name="start" Mode="In" Type="Int32" />
+            <Parameter Name="soluong" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="LaySachTheoIDTu" ReturnType="Collection(QuanLySachModel.LaySachTheoIDTu_Result)">
+          <Parameter Name="idtusach" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <EntitySet Name="DonHangs" EntityType="QuanLySachModel.DonHang" />
+          <EntitySet Name="GioHangs" EntityType="QuanLySachModel.GioHang" />
+          <AssociationSet Name="FK_DonHang_User" Association="QuanLySachModel.FK_DonHang_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="DonHang" EntitySet="DonHangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GioHang_DonHang" Association="QuanLySachModel.FK_GioHang_DonHang">
+            <End Role="DonHang" EntitySet="DonHangs" />
+            <End Role="GioHang" EntitySet="GioHangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GioHang_Sach" Association="QuanLySachModel.FK_GioHang_Sach">
+            <End Role="Sach" EntitySet="Saches" />
+            <End Role="GioHang" EntitySet="GioHangs" />
+          </AssociationSet>
+          <FunctionImport Name="LayGioHang" ReturnType="Collection(QuanLySachModel.LayGioHang_Result)">
+          <Parameter Name="IDDonHag" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="ThemDonHang">
+            <Parameter Name="IDonHang" Mode="In" Type="Guid" />
+            <Parameter Name="NgayDatHang" Mode="In" Type="DateTime" />
+            <Parameter Name="IDNguoiMua" Mode="In" Type="Guid" />
+            <Parameter Name="TongTien" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="ThemgioHang">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="IDDonHag" Mode="In" Type="Guid" />
+            <Parameter Name="sachid" Mode="In" Type="Guid" />
+            <Parameter Name="TamTinh" Mode="In" Type="Decimal" />
+            <Parameter Name="soluong" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateDonHang">
+            <Parameter Name="IDonHang" Mode="In" Type="Guid" />
+            <Parameter Name="TongTien" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateSoluongGioHang">
+            <Parameter Name="idGioHang" Mode="In" Type="Guid" />
+            <Parameter Name="soluong" Mode="In" Type="Int32" />
+            <Parameter Name="TamTinh" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="KiemTraTaiKhoanTrongDonHang" ReturnType="Collection(QuanLySachModel.KiemTraTaiKhoanTrongDonHang_Result)">
+          <Parameter Name="IDUser" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="XoaSpTrogGioHang">
+          <Parameter Name="IdGioHang" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="TongTien" ReturnType="Collection(QuanLySachModel.TongTien_Result)">
+            <Parameter Name="IDDonHang" Mode="In" Type="Guid" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Kiemtrataikhoan_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="nguoidung" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="matkhau" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="dienthoai" Nullable="true" MaxLength="12" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="Quyen" Nullable="true" />
+          <Property Type="String" Name="GoogleID" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="FaceBookID" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="KiemTraTaiKhoanGoogle_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="nguoidung" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="matkhau" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="dienthoai" Nullable="true" MaxLength="12" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="Quyen" Nullable="true" />
+          <Property Type="String" Name="GoogleID" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="FaceBookID" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="LayTuSach_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tentusach" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="DanhSachTheoID_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="sotrang" Nullable="true" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+          <Property Type="Guid" Name="tusach" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="LauTuSachID_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tentusach" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="LaysachID_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="sotrang" Nullable="true" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+          <Property Type="Guid" Name="tusach" Nullable="true" />
+          <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="LayDssach_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="sotrang" Nullable="true" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+          <Property Type="Guid" Name="tusach" Nullable="true" />
+          <Property Type="String" Name="Tentusach" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="DanhSachTBSach_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="sotrang" Nullable="true" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+          <Property Type="Guid" Name="tusach" Nullable="true" />
+          <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+          <Property Type="Int64" Name="RC" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="TimKiemTheoTuSach_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="sotrang" Nullable="true" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+          <Property Type="Guid" Name="tusach" Nullable="true" />
+          <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+          <Property Type="Int64" Name="RC" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="TongSoSach_Result">
+          <Property Type="Int32" Name="soluong" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="LaySachTheoTuS_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="sotrang" Nullable="true" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+          <Property Type="Guid" Name="tusach" Nullable="true" />
+          <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+          <Property Type="Int64" Name="RC" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="LaySachTheoIDTu_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="sotrang" Nullable="true" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+          <Property Type="Guid" Name="tusach" Nullable="true" />
+          <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="DonHang">
+          <Key>
+            <PropertyRef Name="IDonHang" />
+          </Key>
+          <Property Name="IDonHang" Type="Guid" Nullable="false" />
+          <Property Name="NgayDatHang" Type="DateTime" Precision="0" />
+          <Property Name="IDNguoiMua" Type="Guid" />
+          <Property Name="TongTien" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="User" Relationship="QuanLySachModel.FK_DonHang_User" FromRole="DonHang" ToRole="User" />
+          <NavigationProperty Name="GioHangs" Relationship="QuanLySachModel.FK_GioHang_DonHang" FromRole="DonHang" ToRole="GioHang" />
+        </EntityType>
+        <EntityType Name="GioHang">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="IDDonHag" Type="Guid" />
+          <Property Name="sachid" Type="Guid" />
+          <Property Name="TamTinh" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="soluong" Type="Int32" />
+          <NavigationProperty Name="DonHang" Relationship="QuanLySachModel.FK_GioHang_DonHang" FromRole="GioHang" ToRole="DonHang" />
+          <NavigationProperty Name="Sach" Relationship="QuanLySachModel.FK_GioHang_Sach" FromRole="GioHang" ToRole="Sach" />
+        </EntityType>
+        <Association Name="FK_DonHang_User">
+          <End Type="QuanLySachModel.User" Role="User" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuanLySachModel.DonHang" Role="DonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DonHang">
+              <PropertyRef Name="IDNguoiMua" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GioHang_DonHang">
+          <End Type="QuanLySachModel.DonHang" Role="DonHang" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuanLySachModel.GioHang" Role="GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonHang">
+              <PropertyRef Name="IDonHang" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="IDDonHag" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GioHang_Sach">
+          <End Type="QuanLySachModel.Sach" Role="Sach" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuanLySachModel.GioHang" Role="GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sach">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="sachid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="KiemTraTaiKhoanTrongDonHang_Result">
+          <Property Type="Guid" Name="IDonHang" Nullable="false" />
+          <Property Type="DateTime" Name="NgayDatHang" Nullable="true" />
+          <Property Type="Guid" Name="IDNguoiMua" Nullable="true" />
+          <Property Type="Decimal" Name="TongTien" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="LayGioHang_Result">
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="Guid" Name="IDDonHag" Nullable="true" />
+          <Property Type="Int32" Name="soluong" Nullable="true" />
+          <Property Type="Decimal" Name="TamTinh" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Guid" Name="IDSach" Nullable="true" />
+          <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="TongTien_Result">
+          <Property Type="Decimal" Name="TongTien" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="QuanLySachModelStoreContainer" CdmEntityContainer="QuanLySachEntities">
+          <EntitySetMapping Name="Saches">
+            <EntityTypeMapping TypeName="QuanLySachModel.Sach">
+              <MappingFragment StoreEntitySet="Sach">
+                <ScalarProperty Name="NgayPhatHanh" ColumnName="NgayPhatHanh" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+                <ScalarProperty Name="TacGia" ColumnName="TacGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="sotrang" ColumnName="sotrang" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="kho" ColumnName="kho" />
+                <ScalarProperty Name="nhaxuatban" ColumnName="nhaxuatban" />
+                <ScalarProperty Name="tusach" ColumnName="tusach" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TuSaches">
+            <EntityTypeMapping TypeName="QuanLySachModel.TuSach">
+              <MappingFragment StoreEntitySet="TuSach">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tentusach" ColumnName="Tentusach" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="QuanLySachModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nguoidung" ColumnName="nguoidung" />
+                <ScalarProperty Name="matkhau" ColumnName="matkhau" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="dienthoai" ColumnName="dienthoai" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="Quyen" ColumnName="Quyen" />
+                <ScalarProperty Name="GoogleID" ColumnName="GoogleID" />
+                <ScalarProperty Name="FaceBookID" ColumnName="FaceBookID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Kiemtrataikhoan" FunctionName="QuanLySachModel.Store.Kiemtrataikhoan">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.Kiemtrataikhoan_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nguoidung" ColumnName="nguoidung" />
+                <ScalarProperty Name="matkhau" ColumnName="matkhau" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="dienthoai" ColumnName="dienthoai" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="Quyen" ColumnName="Quyen" />
+                <ScalarProperty Name="GoogleID" ColumnName="GoogleID" />
+                <ScalarProperty Name="FaceBookID" ColumnName="FaceBookID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ThemNguoiDung" FunctionName="QuanLySachModel.Store.ThemNguoiDung" />
+          <FunctionImportMapping FunctionImportName="Update_User" FunctionName="QuanLySachModel.Store.Update_User" />
+          <FunctionImportMapping FunctionImportName="XoaTaiKhoan" FunctionName="QuanLySachModel.Store.XoaTaiKhoan" />
+          <FunctionImportMapping FunctionImportName="dangnhapGoogle" FunctionName="QuanLySachModel.Store.dangnhapGoogle" />
+          <FunctionImportMapping FunctionImportName="KiemTraTaiKhoanGoogle" FunctionName="QuanLySachModel.Store.KiemTraTaiKhoanGoogle">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.KiemTraTaiKhoanGoogle_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nguoidung" ColumnName="nguoidung" />
+                <ScalarProperty Name="matkhau" ColumnName="matkhau" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="dienthoai" ColumnName="dienthoai" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="Quyen" ColumnName="Quyen" />
+                <ScalarProperty Name="GoogleID" ColumnName="GoogleID" />
+                <ScalarProperty Name="FaceBookID" ColumnName="FaceBookID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DoiMat_Khau" FunctionName="QuanLySachModel.Store.DoiMat_Khau" />
+          <FunctionImportMapping FunctionImportName="Update_HinhAh" FunctionName="QuanLySachModel.Store.Update_HinhAh" />
+          <FunctionImportMapping FunctionImportName="Update_Taikhoan" FunctionName="QuanLySachModel.Store.Update_Taikhoan" />
+          <FunctionImportMapping FunctionImportName="LayDssach" FunctionName="QuanLySachModel.Store.LayDssach">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.LayDssach_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+                <ScalarProperty Name="TacGia" ColumnName="TacGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="sotrang" ColumnName="sotrang" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="kho" ColumnName="kho" />
+                <ScalarProperty Name="nhaxuatban" ColumnName="nhaxuatban" />
+                <ScalarProperty Name="tusach" ColumnName="tusach" />
+                <ScalarProperty Name="Tentusach" ColumnName="Tentusach" />
+                <ScalarProperty Name="NgayPhatHanh" ColumnName="NgayPhatHanh" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LayTuSach" FunctionName="QuanLySachModel.Store.LayTuSach">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.LayTuSach_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tentusach" ColumnName="Tentusach" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ThemSach" FunctionName="QuanLySachModel.Store.ThemSach" />
+          <FunctionImportMapping FunctionImportName="ThemTuSach" FunctionName="QuanLySachModel.Store.ThemTuSach" />
+          <FunctionImportMapping FunctionImportName="DanhSachTheoID" FunctionName="QuanLySachModel.Store.DanhSachTheoID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.DanhSachTheoID_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+                <ScalarProperty Name="TacGia" ColumnName="TacGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="sotrang" ColumnName="sotrang" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="kho" ColumnName="kho" />
+                <ScalarProperty Name="nhaxuatban" ColumnName="nhaxuatban" />
+                <ScalarProperty Name="tusach" ColumnName="tusach" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SuaSach" FunctionName="QuanLySachModel.Store.SuaSach" />
+          <FunctionImportMapping FunctionImportName="SuaTuSach" FunctionName="QuanLySachModel.Store.SuaTuSach" />
+          <FunctionImportMapping FunctionImportName="XoaSach" FunctionName="QuanLySachModel.Store.XoaSach" />
+          <FunctionImportMapping FunctionImportName="XoaTuSach" FunctionName="QuanLySachModel.Store.XoaTuSach" />
+          <FunctionImportMapping FunctionImportName="LauTuSachID" FunctionName="QuanLySachModel.Store.LauTuSachID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.LauTuSachID_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tentusach" ColumnName="Tentusach" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LaysachID" FunctionName="QuanLySachModel.Store.LaysachID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.LaysachID_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+                <ScalarProperty Name="TacGia" ColumnName="TacGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="sotrang" ColumnName="sotrang" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="kho" ColumnName="kho" />
+                <ScalarProperty Name="nhaxuatban" ColumnName="nhaxuatban" />
+                <ScalarProperty Name="tusach" ColumnName="tusach" />
+                <ScalarProperty Name="NgayPhatHanh" ColumnName="NgayPhatHanh" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DanhSachTBSach" FunctionName="QuanLySachModel.Store.DanhSachTBSach">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.DanhSachTBSach_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+                <ScalarProperty Name="TacGia" ColumnName="TacGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="sotrang" ColumnName="sotrang" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="kho" ColumnName="kho" />
+                <ScalarProperty Name="nhaxuatban" ColumnName="nhaxuatban" />
+                <ScalarProperty Name="tusach" ColumnName="tusach" />
+                <ScalarProperty Name="NgayPhatHanh" ColumnName="NgayPhatHanh" />
+                <ScalarProperty Name="RC" ColumnName="RC" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TimKiemTheoTuSach" FunctionName="QuanLySachModel.Store.TimKiemTheoTuSach">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.TimKiemTheoTuSach_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+                <ScalarProperty Name="TacGia" ColumnName="TacGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="sotrang" ColumnName="sotrang" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="kho" ColumnName="kho" />
+                <ScalarProperty Name="nhaxuatban" ColumnName="nhaxuatban" />
+                <ScalarProperty Name="tusach" ColumnName="tusach" />
+                <ScalarProperty Name="NgayPhatHanh" ColumnName="NgayPhatHanh" />
+                <ScalarProperty Name="RC" ColumnName="RC" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TongSoSach" FunctionName="QuanLySachModel.Store.TongSoSach" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.TongSoSach_Result">
+                <ScalarProperty Name="soluong" ColumnName="soluong" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="KiemTraTkDangKi" FunctionName="QuanLySachModel.Store.KiemTraTkDangKi" />
+          <FunctionImportMapping FunctionImportName="ThemNguoiDungKhach" FunctionName="QuanLySachModel.Store.ThemNguoiDungKhach" />
+          <FunctionImportMapping FunctionImportName="UpdateQuenUser" FunctionName="QuanLySachModel.Store.UpdateQuenUser" />
+          <FunctionImportMapping FunctionImportName="LaySachTheoTuS" FunctionName="QuanLySachModel.Store.LaySachTheoTuS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.LaySachTheoTuS_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+                <ScalarProperty Name="TacGia" ColumnName="TacGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="sotrang" ColumnName="sotrang" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="kho" ColumnName="kho" />
+                <ScalarProperty Name="nhaxuatban" ColumnName="nhaxuatban" />
+                <ScalarProperty Name="tusach" ColumnName="tusach" />
+                <ScalarProperty Name="NgayPhatHanh" ColumnName="NgayPhatHanh" />
+                <ScalarProperty Name="RC" ColumnName="RC" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="LaySachTheoIDTu" FunctionName="QuanLySachModel.Store.LaySachTheoIDTu">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.LaySachTheoIDTu_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+                <ScalarProperty Name="TacGia" ColumnName="TacGia" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="sotrang" ColumnName="sotrang" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="kho" ColumnName="kho" />
+                <ScalarProperty Name="nhaxuatban" ColumnName="nhaxuatban" />
+                <ScalarProperty Name="tusach" ColumnName="tusach" />
+                <ScalarProperty Name="NgayPhatHanh" ColumnName="NgayPhatHanh" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="DonHangs">
+            <EntityTypeMapping TypeName="QuanLySachModel.DonHang">
+              <MappingFragment StoreEntitySet="DonHang">
+                <ScalarProperty Name="TongTien" ColumnName="TongTien" />
+                <ScalarProperty Name="IDNguoiMua" ColumnName="IDNguoiMua" />
+                <ScalarProperty Name="NgayDatHang" ColumnName="NgayDatHang" />
+                <ScalarProperty Name="IDonHang" ColumnName="IDonHang" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GioHangs">
+            <EntityTypeMapping TypeName="QuanLySachModel.GioHang">
+              <MappingFragment StoreEntitySet="GioHang">
+                <ScalarProperty Name="soluong" ColumnName="soluong" />
+                <ScalarProperty Name="TamTinh" ColumnName="TamTinh" />
+                <ScalarProperty Name="sachid" ColumnName="sachid" />
+                <ScalarProperty Name="IDDonHag" ColumnName="IDDonHag" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="LayGioHang" FunctionName="QuanLySachModel.Store.LayGioHang">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.LayGioHang_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="IDDonHag" ColumnName="IDDonHag" />
+                <ScalarProperty Name="soluong" ColumnName="soluong" />
+                <ScalarProperty Name="TamTinh" ColumnName="TamTinh" />
+                <ScalarProperty Name="IDSach" ColumnName="IDSach" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="hinhanh" ColumnName="hinhanh" />
+                <ScalarProperty Name="Tensach" ColumnName="Tensach" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ThemDonHang" FunctionName="QuanLySachModel.Store.ThemDonHang" />
+          <FunctionImportMapping FunctionImportName="ThemgioHang" FunctionName="QuanLySachModel.Store.ThemgioHang" />
+          <FunctionImportMapping FunctionImportName="UpdateDonHang" FunctionName="QuanLySachModel.Store.UpdateDonHang" />
+          <FunctionImportMapping FunctionImportName="UpdateSoluongGioHang" FunctionName="QuanLySachModel.Store.UpdateSoluongGioHang" />
+          <FunctionImportMapping FunctionImportName="KiemTraTaiKhoanTrongDonHang" FunctionName="QuanLySachModel.Store.KiemTraTaiKhoanTrongDonHang">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.KiemTraTaiKhoanTrongDonHang_Result">
+                <ScalarProperty Name="IDonHang" ColumnName="IDonHang" />
+                <ScalarProperty Name="NgayDatHang" ColumnName="NgayDatHang" />
+                <ScalarProperty Name="IDNguoiMua" ColumnName="IDNguoiMua" />
+                <ScalarProperty Name="TongTien" ColumnName="TongTien" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="XoaSpTrogGioHang" FunctionName="QuanLySachModel.Store.XoaSpTrogGioHang" />
+          <FunctionImportMapping FunctionImportName="TongTien" FunctionName="QuanLySachModel.Store.TongTien" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLySachModel.TongTien_Result">
+                <ScalarProperty Name="TongTien" ColumnName="TongTien" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

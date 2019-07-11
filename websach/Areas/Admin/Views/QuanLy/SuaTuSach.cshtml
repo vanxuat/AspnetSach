@@ -1,0 +1,15 @@
+﻿@model Sach_value.TudachValue
+
+<h2>CHỈNH SỬA TỦ SÁCH</h2>
+
+@using (Html.BeginForm("SuaTuSach","QuanLy",FormMethod.Post))
+{
+<div class="form-group">
+    @Html.TextBoxFor(m => m.ID, new { @class = "form-control ",@type="hidden" })
+    @Html.LabelFor(m => m.TenTuSach)
+    @Html.TextBoxFor(m => m.TenTuSach, new { @class = "form-control" })
+</div>
+ @Html.TextBoxFor(m=>m.TenTuSach, new  {@type= "submit" })
+}
+
+

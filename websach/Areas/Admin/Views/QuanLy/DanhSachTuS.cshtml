@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Sach_value.TudachValue>
+
+
+<h2>Danh sách tủ sách</h2>
+@Html.ValidationMessage("loisukhongduoc")
+<table class="table table-bordered">
+    <thead>
+        <tr>
+           
+            <td>Tên Tủ Sách</td>
+            <td>Chức Năng</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                
+                <th>@item.TenTuSach</th>
+                <th>
+                    @Html.ActionLink("Xóa", "XoaTuSach", "QuanLy", new { idxoa = item.ID }, "")
+                    @Html.ActionLink("Sửa", "SuaTuSach", "QuanLy", new { idsua = item.ID },"")
+                </th>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+@Html.ActionLink("Thêm Mới", "ThemTuSach", "QuanLy")

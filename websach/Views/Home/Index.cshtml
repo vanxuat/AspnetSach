@@ -1,0 +1,65 @@
+﻿@{
+    var sodong = ViewBag.Sodong;
+    var MaxTrang = ViewBag.MaxPage;
+    var dsachsp = ViewBag.danhsachSp as List<Sach_value.sachvalue>;
+    int sodongs = (int)ViewBag.sodong;
+    int tam = 0;
+
+
+}
+
+
+<div class="row">
+    <div class="col-sm-3">
+        @{
+            Html.RenderAction("PartialviewMenu", "Home");
+        }
+    </div>
+    <div class="col">
+
+
+        @for (int i = 0; i < sodongs; i++)
+        {
+            int stt = 0;
+            <div class="card-deck">
+                @for (int j = tam; j < dsachsp.Count; j++)
+                {
+
+                    <div class="card">
+                        <a href="@Url.Action("ChiTietSp","Home",new {ID=dsachsp[j].id })"> <img src="@dsachsp[j].HinhAnh" width="300" height="400" alt="Card image cap"></a>
+                        <div class="card-body">
+                            <h5 class="card-title">@dsachsp[j].Tensach</h5>
+                        </div>
+
+                    </div>
+
+
+                    if (stt == 2 || j + 1 == dsachsp.Count)
+                    {
+                        tam = j + 1;
+                        break;
+                    }
+                    stt++;
+                }
+            </div>
+
+        }
+
+
+        <ul class="pagination justify-content-center">
+            <li class="page-item ">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+
+            @for (int i = 0; i < MaxTrang; i++)
+            {
+                <li class="page-item"><a class="page-link" href="@Url.Action("Index","Home",new {pagindex=@i })">@i</a></li>
+            }
+
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+
+    </div>
+</div>

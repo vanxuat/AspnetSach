@@ -1,0 +1,14 @@
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\sach_Controller.dll
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\sach_Controller.pdb
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\sach_model.dll
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\Sach_value.dll
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\EntityFramework.dll
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\sach_model.pdb
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\sach_model.dll.config
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\Sach_value.pdb
+D:\OF\OnlaiCshap\websach\sach_Controller\bin\Debug\EntityFramework.xml
+D:\OF\OnlaiCshap\websach\sach_Controller\obj\Debug\sach_Controller.csprojAssemblyReference.cache
+D:\OF\OnlaiCshap\websach\sach_Controller\obj\Debug\sach_Controller.csproj.CoreCompileInputs.cache
+D:\OF\OnlaiCshap\websach\sach_Controller\obj\Debug\sach_Controller.csproj.CopyComplete
+D:\OF\OnlaiCshap\websach\sach_Controller\obj\Debug\sach_Controller.dll
+D:\OF\OnlaiCshap\websach\sach_Controller\obj\Debug\sach_Controller.pdb

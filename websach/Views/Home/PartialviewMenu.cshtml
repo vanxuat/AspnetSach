@@ -1,0 +1,14 @@
+﻿@using Sach_value
+@{
+    var ltusach = ViewBag.ListuSach as List<TudachValue>;
+}
+
+<h3>Chọn Tủ Sách</h3>
+<ul class="list-group">
+    @foreach (var item in ltusach)
+    {
+        <li class="list-group-item list-group-item-action"><a href="@Url.Action("LayTuSachPT","Home",new {ID=item.ID })">@item.TenTuSach</a></li>
+    }
+
+
+</ul>

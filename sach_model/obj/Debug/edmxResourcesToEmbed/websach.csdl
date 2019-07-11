@@ -1,0 +1,439 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QuanLySachModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Sach">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Guid" Nullable="false" />
+    <Property Name="Tensach" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TacGia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Gia" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="sotrang" Type="Int32" />
+    <Property Name="hinhanh" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+    <Property Name="kho" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="nhaxuatban" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="tusach" Type="Guid" />
+    <NavigationProperty Name="TuSach1" Relationship="Self.FK_Sach_tusach" FromRole="Sach" ToRole="TuSach" />
+    <Property Name="NgayPhatHanh" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="GioHangs" Relationship="QuanLySachModel.FK_GioHang_Sach" FromRole="Sach" ToRole="GioHang" />
+  </EntityType>
+  <EntityType Name="TuSach">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Guid" Nullable="false" />
+    <Property Name="Tentusach" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Saches" Relationship="Self.FK_Sach_tusach" FromRole="TuSach" ToRole="Sach" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Guid" Nullable="false" />
+    <Property Name="nguoidung" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="matkhau" Type="String" MaxLength="200" FixedLength="true" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="dienthoai" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
+    <Property Name="hinhanh" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Quyen" Type="Int32" />
+    <Property Name="GoogleID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="FaceBookID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DonHangs" Relationship="QuanLySachModel.FK_DonHang_User" FromRole="User" ToRole="DonHang" />
+  </EntityType>
+  <Association Name="FK_Sach_tusach">
+    <End Role="TuSach" Type="Self.TuSach" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Sach" Type="Self.Sach" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TuSach">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Sach">
+        <PropertyRef Name="tusach" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QuanLySachEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Saches" EntityType="Self.Sach" />
+    <EntitySet Name="TuSaches" EntityType="Self.TuSach" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_Sach_tusach" Association="Self.FK_Sach_tusach">
+      <End Role="TuSach" EntitySet="TuSaches" />
+      <End Role="Sach" EntitySet="Saches" />
+    </AssociationSet>
+    <FunctionImport Name="Kiemtrataikhoan" ReturnType="Collection(QuanLySachModel.Kiemtrataikhoan_Result)">
+      <Parameter Name="nguoidung" Mode="In" Type="String" />
+      <Parameter Name="matkhau" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="ThemNguoiDung">
+      <Parameter Name="nguoidung" Mode="In" Type="String" />
+      <Parameter Name="matkhau" Mode="In" Type="String" />
+      <Parameter Name="email" Mode="In" Type="String" />
+      <Parameter Name="dienthoai" Mode="In" Type="String" />
+      <Parameter Name="Quyen" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Update_User">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="matkhau" Mode="In" Type="String" />
+      <Parameter Name="email" Mode="In" Type="String" />
+      <Parameter Name="dienthoai" Mode="In" Type="String" />
+      <Parameter Name="hinhanh" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="XoaTaiKhoan">
+      <Parameter Name="ID" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="dangnhapGoogle">
+      <Parameter Name="email" Mode="In" Type="String" />
+      <Parameter Name="hinhanh" Mode="In" Type="String" />
+      <Parameter Name="GoogleID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="KiemTraTaiKhoanGoogle" ReturnType="Collection(QuanLySachModel.KiemTraTaiKhoanGoogle_Result)">
+      <Parameter Name="GoogleID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="DoiMat_Khau">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="matkhau" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Update_HinhAh">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="hinhanh" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Update_Taikhoan">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="email" Mode="In" Type="String" />
+      <Parameter Name="dienthoai" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="LayDssach" ReturnType="Collection(QuanLySachModel.LayDssach_Result)" />
+    <FunctionImport Name="LayTuSach" ReturnType="Collection(QuanLySachModel.LayTuSach_Result)" />
+    <FunctionImport Name="ThemSach">
+      <Parameter Name="Tensach" Mode="In" Type="String" />
+      <Parameter Name="TacGia" Mode="In" Type="String" />
+      <Parameter Name="Gia" Mode="In" Type="Decimal" />
+      <Parameter Name="sotrang" Mode="In" Type="Int32" />
+      <Parameter Name="hinhanh" Mode="In" Type="String" />
+      <Parameter Name="kho" Mode="In" Type="String" />
+      <Parameter Name="nhaxuatban" Mode="In" Type="String" />
+      <Parameter Name="tusach" Mode="In" Type="Guid" />
+      <Parameter Name="NgayPhatHanh" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="ThemTuSach">
+      <Parameter Name="Tentusach" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="DanhSachTheoID" ReturnType="Collection(QuanLySachModel.DanhSachTheoID_Result)">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="SuaSach">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="Tensach" Mode="In" Type="String" />
+      <Parameter Name="TacGia" Mode="In" Type="String" />
+      <Parameter Name="Gia" Mode="In" Type="Decimal" />
+      <Parameter Name="sotrang" Mode="In" Type="Int32" />
+      <Parameter Name="hinhanh" Mode="In" Type="String" />
+      <Parameter Name="kho" Mode="In" Type="String" />
+      <Parameter Name="nhaxuatban" Mode="In" Type="String" />
+      <Parameter Name="NgayPhatHanh" Mode="In" Type="DateTime" />
+      <Parameter Name="tusach" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="SuaTuSach">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="Tentusach" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="XoaSach">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="XoaTuSach">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="LauTuSachID" ReturnType="Collection(QuanLySachModel.LauTuSachID_Result)">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="LaysachID" ReturnType="Collection(QuanLySachModel.LaysachID_Result)">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="DanhSachTBSach" ReturnType="Collection(QuanLySachModel.DanhSachTBSach_Result)">
+      <Parameter Name="batdau" Mode="In" Type="Int32" />
+      <Parameter Name="soluong" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="TimKiemTheoTuSach" ReturnType="Collection(QuanLySachModel.TimKiemTheoTuSach_Result)">
+      <Parameter Name="batdau" Mode="In" Type="Int32" />
+      <Parameter Name="soluong" Mode="In" Type="Int32" />
+      <Parameter Name="IDtusach" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="TongSoSach" ReturnType="Collection(QuanLySachModel.TongSoSach_Result)" />
+    <FunctionImport Name="KiemTraTkDangKi" ReturnType="Collection(String)">
+      <Parameter Name="nguoiduung" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="ThemNguoiDungKhach">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="nguoidung" Mode="In" Type="String" />
+      <Parameter Name="matkhau" Mode="In" Type="String" />
+      <Parameter Name="email" Mode="In" Type="String" />
+      <Parameter Name="dienthoai" Mode="In" Type="String" />
+      <Parameter Name="Quyen" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateQuenUser">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="LaySachTheoTuS" ReturnType="Collection(QuanLySachModel.LaySachTheoTuS_Result)">
+      <Parameter Name="idtusach" Mode="In" Type="Guid" />
+      <Parameter Name="start" Mode="In" Type="Int32" />
+      <Parameter Name="soluong" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="LaySachTheoIDTu" ReturnType="Collection(QuanLySachModel.LaySachTheoIDTu_Result)">
+      <Parameter Name="idtusach" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <EntitySet Name="DonHangs" EntityType="QuanLySachModel.DonHang" />
+    <EntitySet Name="GioHangs" EntityType="QuanLySachModel.GioHang" />
+    <AssociationSet Name="FK_DonHang_User" Association="QuanLySachModel.FK_DonHang_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="DonHang" EntitySet="DonHangs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GioHang_DonHang" Association="QuanLySachModel.FK_GioHang_DonHang">
+      <End Role="DonHang" EntitySet="DonHangs" />
+      <End Role="GioHang" EntitySet="GioHangs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GioHang_Sach" Association="QuanLySachModel.FK_GioHang_Sach">
+      <End Role="Sach" EntitySet="Saches" />
+      <End Role="GioHang" EntitySet="GioHangs" />
+    </AssociationSet>
+    <FunctionImport Name="LayGioHang" ReturnType="Collection(QuanLySachModel.LayGioHang_Result)">
+      <Parameter Name="IDDonHag" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="ThemDonHang">
+      <Parameter Name="IDonHang" Mode="In" Type="Guid" />
+      <Parameter Name="NgayDatHang" Mode="In" Type="DateTime" />
+      <Parameter Name="IDNguoiMua" Mode="In" Type="Guid" />
+      <Parameter Name="TongTien" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <FunctionImport Name="ThemgioHang">
+      <Parameter Name="id" Mode="In" Type="Guid" />
+      <Parameter Name="IDDonHag" Mode="In" Type="Guid" />
+      <Parameter Name="sachid" Mode="In" Type="Guid" />
+      <Parameter Name="TamTinh" Mode="In" Type="Decimal" />
+      <Parameter Name="soluong" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateDonHang">
+      <Parameter Name="IDonHang" Mode="In" Type="Guid" />
+      <Parameter Name="TongTien" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateSoluongGioHang">
+      <Parameter Name="idGioHang" Mode="In" Type="Guid" />
+      <Parameter Name="soluong" Mode="In" Type="Int32" />
+      <Parameter Name="TamTinh" Mode="In" Type="Decimal" />
+    </FunctionImport>
+    <FunctionImport Name="KiemTraTaiKhoanTrongDonHang" ReturnType="Collection(QuanLySachModel.KiemTraTaiKhoanTrongDonHang_Result)">
+      <Parameter Name="IDUser" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="XoaSpTrogGioHang">
+      <Parameter Name="IdGioHang" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="TongTien" ReturnType="Collection(QuanLySachModel.TongTien_Result)">
+      <Parameter Name="IDDonHang" Mode="In" Type="Guid" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="Kiemtrataikhoan_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="nguoidung" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="matkhau" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="email" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="dienthoai" Nullable="true" MaxLength="12" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="Quyen" Nullable="true" />
+    <Property Type="String" Name="GoogleID" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="FaceBookID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="KiemTraTaiKhoanGoogle_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="nguoidung" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="matkhau" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="email" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="dienthoai" Nullable="true" MaxLength="12" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="Quyen" Nullable="true" />
+    <Property Type="String" Name="GoogleID" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="FaceBookID" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="LayTuSach_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tentusach" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="DanhSachTheoID_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="sotrang" Nullable="true" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+    <Property Type="Guid" Name="tusach" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="LauTuSachID_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tentusach" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="LaysachID_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="sotrang" Nullable="true" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+    <Property Type="Guid" Name="tusach" Nullable="true" />
+    <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="LayDssach_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="sotrang" Nullable="true" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+    <Property Type="Guid" Name="tusach" Nullable="true" />
+    <Property Type="String" Name="Tentusach" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="DanhSachTBSach_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="sotrang" Nullable="true" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+    <Property Type="Guid" Name="tusach" Nullable="true" />
+    <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+    <Property Type="Int64" Name="RC" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="TimKiemTheoTuSach_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="sotrang" Nullable="true" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+    <Property Type="Guid" Name="tusach" Nullable="true" />
+    <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+    <Property Type="Int64" Name="RC" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="TongSoSach_Result">
+    <Property Type="Int32" Name="soluong" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="LaySachTheoTuS_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="sotrang" Nullable="true" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+    <Property Type="Guid" Name="tusach" Nullable="true" />
+    <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+    <Property Type="Int64" Name="RC" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="LaySachTheoIDTu_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TacGia" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="sotrang" Nullable="true" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="kho" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="nhaxuatban" Nullable="true" MaxLength="50" />
+    <Property Type="Guid" Name="tusach" Nullable="true" />
+    <Property Type="DateTime" Name="NgayPhatHanh" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="DonHang">
+    <Key>
+      <PropertyRef Name="IDonHang" />
+    </Key>
+    <Property Name="IDonHang" Type="Guid" Nullable="false" />
+    <Property Name="NgayDatHang" Type="DateTime" Precision="0" />
+    <Property Name="IDNguoiMua" Type="Guid" />
+    <Property Name="TongTien" Type="Decimal" Precision="10" Scale="2" />
+    <NavigationProperty Name="User" Relationship="QuanLySachModel.FK_DonHang_User" FromRole="DonHang" ToRole="User" />
+    <NavigationProperty Name="GioHangs" Relationship="QuanLySachModel.FK_GioHang_DonHang" FromRole="DonHang" ToRole="GioHang" />
+  </EntityType>
+  <EntityType Name="GioHang">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Guid" Nullable="false" />
+    <Property Name="IDDonHag" Type="Guid" />
+    <Property Name="sachid" Type="Guid" />
+    <Property Name="TamTinh" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="soluong" Type="Int32" />
+    <NavigationProperty Name="DonHang" Relationship="QuanLySachModel.FK_GioHang_DonHang" FromRole="GioHang" ToRole="DonHang" />
+    <NavigationProperty Name="Sach" Relationship="QuanLySachModel.FK_GioHang_Sach" FromRole="GioHang" ToRole="Sach" />
+  </EntityType>
+  <Association Name="FK_DonHang_User">
+    <End Type="QuanLySachModel.User" Role="User" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QuanLySachModel.DonHang" Role="DonHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="DonHang">
+        <PropertyRef Name="IDNguoiMua" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GioHang_DonHang">
+    <End Type="QuanLySachModel.DonHang" Role="DonHang" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QuanLySachModel.GioHang" Role="GioHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DonHang">
+        <PropertyRef Name="IDonHang" />
+      </Principal>
+      <Dependent Role="GioHang">
+        <PropertyRef Name="IDDonHag" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GioHang_Sach">
+    <End Type="QuanLySachModel.Sach" Role="Sach" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="QuanLySachModel.GioHang" Role="GioHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sach">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="GioHang">
+        <PropertyRef Name="sachid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="KiemTraTaiKhoanTrongDonHang_Result">
+    <Property Type="Guid" Name="IDonHang" Nullable="false" />
+    <Property Type="DateTime" Name="NgayDatHang" Nullable="true" />
+    <Property Type="Guid" Name="IDNguoiMua" Nullable="true" />
+    <Property Type="Decimal" Name="TongTien" Nullable="true" Precision="10" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="LayGioHang_Result">
+    <Property Type="Guid" Name="id" Nullable="false" />
+    <Property Type="Guid" Name="IDDonHag" Nullable="true" />
+    <Property Type="Int32" Name="soluong" Nullable="true" />
+    <Property Type="Decimal" Name="TamTinh" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Guid" Name="IDSach" Nullable="true" />
+    <Property Type="Decimal" Name="Gia" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="String" Name="hinhanh" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Tensach" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="TongTien_Result">
+    <Property Type="Decimal" Name="TongTien" Nullable="true" Precision="38" Scale="2" />
+  </ComplexType>
+</Schema>

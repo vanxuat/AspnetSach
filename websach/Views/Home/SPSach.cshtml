@@ -1,0 +1,154 @@
+﻿@model  IEnumerable<Sach_value.ThongTinGioHang>
+
+<h2>Danh Sản Phẩm Sách Trong Giỏ Hang</h2>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Hình Ảnh</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Giá Bán Lẻ</th>
+                <th>Số Lượng</th>
+                <th>Tạm Tính</th>
+                <th>Chức Năng</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.Hinhanh" width="150" height="200" /></td>
+                    <td>@item.TenSach</td>
+                    <td>@item.Gia</td>
+                    <td>
+                        <input id="@item.IDGioHang" class="form-control" type="number" min="1" value="@item.SoLuong" data-gia="@item.Gia" data-id="@item.IdSach" onchange="ThayDoiSoLuong(this)" />
+
+                    </td>
+                    <td id="@item.IdSach">@item.TamTinh</td>
+                    <td>
+                        <a class="btn btn-primary" onclick="XoaSachGH('@item.IDGioHang','@item.TenSach')">Xóa</a>
+                        <a class="btn btn-primary" onclick="CapNhatGioHang(this)" data-id="@item.IdSach" data-iDsoluong="@item.IDGioHang" data-IDDonHang="@item.IDDonHang">Cập Nhật</a>
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+
+<div style="margin-left:900px">
+    <h3>Tổng Cộng</h3>
+    <hr />
+    <h4>Tổng Tiền</h4>
+    <span id="tongtien">
+        @ViewBag.TongTien
+    </span>
+   
+    
+</div>
+
+
+@section ThaoTachSanPham{
+    <script type="text/javascript">
+
+
+        function CapNhatGioHang(thes) {
+            var ID_Soluong_IDGioHang = $(thes).attr('data-iDsoluong');
+            var ID_TamTinh = $(thes).attr('data-id');
+
+            var IDDonHang = $(thes).attr('data-IDDonHang');
+
+
+
+            var SLMoi = $(`#${ID_Soluong_IDGioHang}`).val();
+            var tamTinhMoi = $(`#${ID_TamTinh}`).text();
+
+                $.ajax({
+                  url: "@Url.Action("ThayDoiSoL", "Home")",
+                  type: "POST",
+                   contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                    data: '{"IDGioHang":"' + ID_Soluong_IDGioHang + '","SL":"' + SLMoi + '","GiaTam":"' + tamTinhMoi + '","IDDonHang":"' + IDDonHang + '"}',
+                      success: function (result) {
+                          if (result == true) {
+                            
+                     window.location.assign('/Home/SPSach')
+                                             }
+                          else {
+                              alert("Thuet");
+                                                            }
+                              }
+                });
+
+
+
+
+        }
+
+
+
+
+
+        function ThayDoiSoLuong(the) {
+            var soluong = $(the).val();
+            var idsach = $(the).attr("data-id");
+            var gia = parseFloat( $(the).attr("data-gia"));
+
+            var tong = soluong *  gia;
+
+            $(`#${idsach}`).text(tong);
+
+
+        }
+
+
+
+
+        function XoaSachGH(IDGioHang,TenSap) {
+            $.confirm({
+                title: 'Xóa Sản Phẩm',
+                content: TenSap,
+                buttons: {
+                    Có: function () {
+                          $.ajax({
+                              url: "@Url.Action("XoaSpGioHang", "Home")",
+                               type: "POST",
+                                contentType: "application/json; charset=utf-8",
+                                  dataType: "json",
+                                  data: '{"ID":"' + IDGioHang + '"}',
+                                  success: function (result) {
+                                   if (result == true) {
+                                     alert("Xóa Thành Công");
+                                        window.location.assign('/Home/SPSach')
+                                         }
+                                 else {
+                                              alert("Xóa Không Thành Công");
+                                                        }
+                          }
+            });
+
+
+
+
+                    },
+                    Không: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+
+
+
+
+
+
+        }
+
+
+    </script>
+
+}
